@@ -1,5 +1,6 @@
 import { Fraunces, Outfit } from 'next/font/google';
 import Lightbox from '../components/Lightbox';
+import DemoDialog from '../components/DemoDialog';
 import './globals.css';
 
 const outfit = Outfit({
@@ -23,7 +24,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${fraunces.variable}`}>
       <body>
-        <Lightbox>{children}</Lightbox>
+        <Lightbox>
+          <DemoDialog>{children}</DemoDialog>
+        </Lightbox>
       </body>
     </html>
   );

@@ -2,10 +2,18 @@
 
 import { useState } from 'react';
 import Logo from './Logo';
+import { useDemo } from './DemoDialog';
 import { navLinks } from '../lib/content';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const openDemo = useDemo();
+
+  function enquire(event) {
+    event.preventDefault();
+    setOpen(false);
+    openDemo();
+  }
 
   return (
     <header className={open ? 'header nav-open' : 'header'}>
@@ -19,9 +27,9 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a className="btn btn-primary" href="#enquire" onClick={() => setOpen(false)}>Enquire</a>
+          <a className="btn btn-primary" href="#enquire" onClick={enquire}>Enquire</a>
         </nav>
-        <a className="btn btn-primary desk" href="#enquire">Enquire</a>
+        <a className="btn btn-primary desk" href="#enquire" onClick={enquire}>Enquire</a>
         <button
           className="menu-btn"
           type="button"

@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Metrics from '../components/Metrics';
 import Cabinet from '../components/Cabinet';
+import Showreel from '../components/Showreel';
 import Specifications from '../components/Specifications';
 import Journey from '../components/Journey';
 import Technology from '../components/Technology';
@@ -21,6 +22,7 @@ export default function HomePage() {
           <Metrics />
         </section>
         <Cabinet />
+        <Showreel />
         <Specifications />
         <Journey />
         <Technology />
