@@ -23,7 +23,7 @@ export default function Hero() {
         <div className="hero-stage">
           <div className="hero-frame">
             <ZoomImage
-              src="/images/mini-beautypod-specifications.jpeg"
+              src="/images/main.jpeg"
               alt="Mini BeautyPOD engineering sheet: illuminated cabinet, external dimensions, shelf spacing, tablet and capacity"
             />
             <div className="hero-caption">

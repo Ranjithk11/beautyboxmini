@@ -32,7 +32,7 @@ export default function Specifications() {
           </div>
           <div className="spec-visual plate">
             <ZoomImage
-              src="/images/mini-beautypod-specifications.jpeg"
+              src="/images/main.jpeg"
               alt="Full Mini BeautyPOD engineering sheet with external dimensions, interior spacing, tablet specs and product fit examples"
             />
           </div>
