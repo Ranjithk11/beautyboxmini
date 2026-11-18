@@ -4,38 +4,27 @@ import { specifications } from '../lib/content';
 export default function Specifications() {
   return (
     <section className="section cream" id="specs">
-      <div className="wrap">
-        <div className="kicker">Engineering</div>
-        <h2>The measurements, kept honest.</h2>
-        <p className="intro">
-          Taken from the Mini BeautyPOD sheet: external size, shelf clearances, tablet, and an approximate capacity plan.
-        </p>
-        <div className="spec-layout">
-          <div className="spec-card">
-            <div className="spec-head">
-              <h3>Mini BeautyPOD</h3>
-              <span className="pill">Specification</span>
-            </div>
-            <table>
-              <tbody>
-                {specifications.map(([label, value]) => (
-                  <tr key={label}>
-                    <td>{label}</td>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="fine">
-              Capacity depends on bottle and jar size and how the shelves are dressed. Overall height of 1,030 mm includes tolerance. Open the drawing to read shelf-by-shelf fit.
-            </p>
+      <div className="wrap spec-layout">
+        <div className="spec-card reveal">
+          <div className="spec-head">
+            <h2>Mini BeautyBox</h2>
+            <span className="pill">Specification</span>
           </div>
-          <div className="spec-visual plate">
-            <ZoomImage
-              src="/images/main.jpeg"
-              alt="Full Mini BeautyPOD engineering sheet with external dimensions, interior spacing, tablet specs and product fit examples"
-            />
-          </div>
+          <p className="spec-lead">The few measurements that decide where it can stand.</p>
+          <ul className="spec-points">
+            {specifications.map(([label, value]) => (
+              <li key={label}>
+                <span>{label}</span>
+                <b>{value}</b>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="spec-visual plate reveal">
+          <ZoomImage
+            src="/images/main.jpeg"
+            alt="Mini BeautyBox cabinet, open, with warm light on three shelves of skincare"
+          />
         </div>
       </div>
     </section>

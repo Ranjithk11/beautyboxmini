@@ -1,13 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Logo from './Logo';
 import { useDemo } from './DemoDialog';
 import { navLinks } from '../lib/content';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [solid, setSolid] = useState(false);
   const openDemo = useDemo();
+
+  useEffect(() => {
+    const onScroll = () => setSolid(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   function enquire(event) {
     event.preventDefault();
@@ -16,7 +24,7 @@ export default function Header() {
   }
 
   return (
-    <header className={open ? 'header nav-open' : 'header'}>
+    <header className={['header', solid ? 'solid' : '', open ? 'nav-open' : ''].filter(Boolean).join(' ')}>
       <div className="header-inner wrap">
         <a className="brand" href="#home" onClick={() => setOpen(false)}>
           <Logo />

@@ -1,8 +1,8 @@
 export default function TopBar() {
   return (
-    <div className="topbar" aria-label="Mini BeautyPOD by Leaf Water">
+    <div className="topbar" aria-label="Mini BeautyBox by Leaf Water">
       <p className="topbar-line">
-        <span>Mini BeautyPOD</span>
+        <span>Mini BeautyBox</span>
         <i aria-hidden="true" />
         <span>by Leaf Water</span>
       </p>

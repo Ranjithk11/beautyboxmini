@@ -4,6 +4,8 @@ import Hero from '../components/Hero';
 import Metrics from '../components/Metrics';
 import Cabinet from '../components/Cabinet';
 import Showreel from '../components/Showreel';
+import Pairing from '../components/Pairing';
+import Wholesale from '../components/Wholesale';
 import Specifications from '../components/Specifications';
 import Journey from '../components/Journey';
 import Technology from '../components/Technology';
@@ -19,8 +21,10 @@ export default function HomePage() {
       <main>
         <section className="hero" id="home">
           <Hero />
-          <Metrics />
         </section>
+        <Metrics />
+        <Pairing />
+        <Wholesale />
         <Cabinet />
         <Showreel />
         <Specifications />

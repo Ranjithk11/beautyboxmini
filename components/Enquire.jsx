@@ -8,12 +8,12 @@ export default function Enquire() {
   return (
     <section className="section enquire-section" id="enquire">
       <div className="wrap">
-        <div className="enquire">
+        <div className="enquire reveal">
           <div>
             <div className="kicker gold">Private walkthrough</div>
-            <h2>Book a BeautyBox demo.</h2>
+            <h2>Ask for the machine, the products, or both.</h2>
             <p className="intro">
-              Share a few details and pick a live walkthrough slot. The note goes to the same Leaf Water desk that takes BeautyPod demos.
+              Tell us which supply you want. The note goes to the same Leaf Water desk that takes BeautyBox enquiries.
             </p>
           </div>
           <div className="enquire-actions">

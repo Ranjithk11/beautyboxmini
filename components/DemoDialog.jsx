@@ -2,9 +2,9 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
-  demoMail,
   interests,
   locationCounts,
+  offers,
   timelines,
   walkthroughSlots
 } from '../lib/content';
@@ -21,6 +21,7 @@ const emptyForm = {
   designation: '',
   phone: '',
   email: '',
+  offer: '',
   interests: [],
   locations: '1',
   timeline: '1–3 months',
@@ -29,6 +30,7 @@ const emptyForm = {
 
 export default function DemoDialog({ children }) {
   const [open, setOpen] = useState(false);
+  const [preset, setPreset] = useState('');
 
   useEffect(() => {
     if (!open) return undefined;
@@ -44,16 +46,18 @@ export default function DemoDialog({ children }) {
   }, [open]);
 
   return (
-    <DemoContext.Provider value={() => setOpen(true)}>
+    <DemoContext.Provider value={(offer) => { setPreset(offer || ''); setOpen(true); }}>
       {children}
-      {open ? <DemoModal onClose={() => setOpen(false)} /> : null}
+      {open ? <DemoModal initialOffer={preset} onClose={() => setOpen(false)} /> : null}
     </DemoContext.Provider>
   );
 }
 
-function DemoModal({ onClose }) {
-  const [form, setForm] = useState(emptyForm);
+function DemoModal({ onClose, initialOffer }) {
+  const [form, setForm] = useState({ ...emptyForm, offer: initialOffer || '' });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   function setField(name, value) {
     setForm((current) => ({ ...current, [name]: value }));
@@ -69,23 +73,44 @@ function DemoModal({ onClose }) {
     });
   }
 
-  function onSubmit(event) {
+  async function onSubmit(event) {
     event.preventDefault();
-    if (form.interests.length === 0) return;
-    const subject = 'BeautyBox Demo Request';
-    const body = [
-      `Name: ${form.name}`,
-      `Company: ${form.company}`,
-      `Designation: ${form.designation}`,
-      `Phone: ${form.phone}`,
-      `Email: ${form.email}`,
-      `Interested in: ${form.interests.join(', ')}`,
-      `Number of locations: ${form.locations}`,
-      `Expected timeline: ${form.timeline}`,
-      `Walkthrough slot: ${form.slot}`
-    ].join('\n');
-    setSent(true);
-    window.location.href = `mailto:${demoMail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (!form.offer || sending) return;
+    setSending(true);
+    setFailed(false);
+    const payload = {
+      event: 'beautybox_enquiry',
+      source: 'BeautyBox',
+      requested_at: new Date().toISOString(),
+      offer: form.offer,
+      name: form.name,
+      company: form.company,
+      designation: form.designation,
+      phone: form.phone,
+      email: form.email,
+      interests: form.interests,
+      locations: form.locations,
+      timeline: form.timeline,
+      slot: form.slot,
+      user: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone
+      }
+    };
+    try {
+      const response = await fetch('/api/enquire', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error('Enquiry was not accepted');
+      setSent(true);
+    } catch {
+      setFailed(true);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -94,13 +119,13 @@ function DemoModal({ onClose }) {
         <header className="demo-head">
           <p className="demo-kicker">Private walkthrough</p>
           <h2 id="demo-title">Book a BeautyBox Demo</h2>
-          <p>Share a few details and pick a live walkthrough slot. Your enquiry goes to the same Leaf Water desk as BeautyPod.</p>
+          <p>Say whether you want the machine and the products, or the products alone. The enquiry goes to the Leaf Water desk.</p>
           <button type="button" className="demo-close" aria-label="Close" onClick={onClose}>×</button>
         </header>
         {sent ? (
           <div className="demo-success">
-            <h3>The request is ready.</h3>
-            <p>Your mail app opened a BeautyBox demo note to {demoMail}. Send that message and the team has the walkthrough details.</p>
+            <h3>The enquiry is with the team.</h3>
+            <p>We have the details for {form.offer}. Someone from the Leaf Water desk will come back to you.</p>
             <button type="button" className="btn btn-primary" onClick={onClose}>Close</button>
           </div>
         ) : (
@@ -129,6 +154,18 @@ function DemoModal({ onClose }) {
             </div>
 
             <fieldset className="demo-choice">
+              <legend>What do you need? *</legend>
+              <div className="demo-radios">
+                {offers.map((item) => (
+                  <label key={item.id}>
+                    <input type="radio" name="offer" required checked={form.offer === item.title} onChange={() => setField('offer', item.title)} />
+                    {item.title}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="demo-choice">
               <legend>Interested in</legend>
               <div className="demo-pills">
                 {interests.map((item) => {
@@ -146,7 +183,7 @@ function DemoModal({ onClose }) {
                   );
                 })}
               </div>
-              {form.interests.length === 0 ? <p className="demo-hint">Choose at least one.</p> : null}
+              {failed ? <p className="demo-hint">The enquiry did not go through. Please try again.</p> : null}
             </fieldset>
 
             <fieldset className="demo-choice">
@@ -185,7 +222,9 @@ function DemoModal({ onClose }) {
               </div>
             </fieldset>
 
-            <button className="btn btn-primary demo-submit" type="submit">Request walkthrough</button>
+            <button className="btn btn-primary demo-submit" type="submit" disabled={sending}>
+              {sending ? 'Sending…' : 'Send enquiry'}
+            </button>
           </form>
         )}
       </div>

@@ -4,11 +4,11 @@ import { footerLinks } from '../lib/content';
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="wrap footer-row">
+      <div className="wrap footer-row reveal">
         <div>
           <Logo className="logo footer-logo" />
           <p>
-            Dimensions, capacity and the payment journey follow the supplied Mini BeautyPOD and BeautyBox sheets. Confirm RFID performance and payment integration before a commercial order.
+            Dimensions, capacity and the payment journey follow the supplied Mini BeautyBox and BeautyBox sheets. Confirm RFID performance and payment integration before a commercial order.
           </p>
         </div>
         <div className="footer-links">
